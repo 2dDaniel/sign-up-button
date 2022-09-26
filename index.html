@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>javascript_reusable_card</title>
+</head>
+<style>
+    .btn{
+        background-color: #0070f3;
+        color: #fff;
+        border: none;
+        border-radius: 7px;
+        padding: 3px 2rem;
+        font-size: x-large;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        box-shadow: 0 4px 14px 0 rgba(0, 118, 255, 0.39);
+    }
+    .btn:hover{
+        background: #1d80f0;
+    }
+    .btn:disabled{
+        background: #6aa8f0;
+    }
+    .fading{
+        animation: fading 0.5s infinite;
+    }
+    @keyframes fading{
+        0%{
+            color: #6aa8f0;
+        }
+        50%{
+            color: #fff;
+        }
+        100%{
+            color: #6aa8f0;
+        }
+    }
+</style>
+<body>
+ <app-button id="btn" onclick="logMe()" text="Login"></app-button> 
+ <app-button id="btn" onclick="logMe()" text="register"></app-button>
+
+
+<script>
+    const login = document.querySelector("#btn")
+    const logMe = () =>{
+        const newText = login.textContent;
+        login.setAttribute("improgress", "true")
+
+        setTimeout(()=>{
+            login.removeAttribute("improgress")
+        console.log("succefully logged");
+    },2000)
+    }
+    class button extends HTMLElement{
+        constructor(){
+            super();
+            const text = this.getAttribute("text")
+            this.innerHTML= `<button class="btn">${text}</button>`;
+        }
+        static get observedAttributes(){
+            return["improgress"]
+        }
+        attributeChangedCallback(attribute, oldValue, newValue){
+           const login =this.querySelector("button")
+           if(newValue){
+            login.textContent = "Login..."
+            login.setAttribute("disabled", "true")
+            login.classList.add("fading")
+           }else{
+            login.textContent = this.getAttribute("text")
+            login.removeAttribute("disabled")
+            login.classList.remove("fading")
+           }
+            }
+  
+
+        }
+customElements.define("app-button", button)
+        
+
+
+ </script>
+</body>
+</html>
